@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaBreathWork™ — Breathe. Balance. Become.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#070706;
+    --bg-2:#0b0c0a;
+    --panel:#0d0f0c;
+    --panel-2:#101208;
+    --border:rgba(198,214,160,0.14);
+    --border-strong:rgba(198,214,160,0.32);
+    --green:#84a055;
+    --green-2:#a3c26c;
+    --green-deep:#3f4f27;
+    --ink:#f2efe3;
+    --ink-dim:#aeaa9c;
+    --ink-faint:#6d6a5e;
+    --line:rgba(242,239,227,0.55);
+    --line-faint:rgba(242,239,227,0.20);
+
+    --font-display:'Cormorant Garamond', serif;
+    --font-sans:'Jost', sans-serif;
+
+    --container:1180px;
+    --space-1:0.5rem;
+    --space-2:1rem;
+    --space-3:1.75rem;
+    --space-4:2.75rem;
+    --space-5:4.5rem;
+    --space-6:7rem;
+
+    --radius-sm:10px;
+    --radius-md:16px;
+    --radius-pill:999px;
+
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 600px at 50% 0%, rgba(132,160,85,0.09), transparent 60%),
+      radial-gradient(ellipse 1200px 800px at 50% 30%, rgba(132,160,85,0.05), transparent 65%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-sans);
+    font-weight:300;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* faint grain for depth */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:2000;
+    opacity:0.035;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3{ font-family:var(--font-display); font-weight:500; margin:0; color:var(--ink); }
+  p{ margin:0; }
+  ul{ margin:0; padding:0; list-style:none; }
+  button{ font-family:inherit; }
+
+  .container{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:0 var(--space-3);
+  }
+
+  ::selection{ background:var(--green-deep); color:var(--ink); }
+
+  :focus-visible{
+    outline:1.5px solid var(--green-2);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ============ EYEBROW / LABELS ============ */
+  .eyebrow{
+    font-family:var(--font-sans);
+    font-weight:500;
+    font-size:0.72rem;
+    letter-spacing:0.42em;
+    text-transform:uppercase;
+    color:var(--green-2);
+    margin:0;
+  }
+  .eyebrow.center{ text-align:center; }
+
+  /* ============ NAV ============ */
+  .site-nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:linear-gradient(to bottom, rgba(7,7,6,0.92), rgba(7,7,6,0.75));
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.1rem var(--space-3);
+    gap:var(--space-3);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:0.85rem;
+    flex-shrink:0;
+  }
+  .brand-mark{
+    width:42px; height:42px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    border:1px solid var(--border-strong);
+    flex-shrink:0;
+  }
+  .brand-mark svg{ width:100%; height:100%; }
+  .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
+  .brand-name{
+    font-family:var(--font-display);
+    font-size:1.35rem;
+    letter-spacing:0.01em;
+    color:var(--ink);
+  }
+  .brand-name sup{ font-size:0.55em; }
+  .brand-tag{
+    font-family:var(--font-sans);
+    font-size:0.58rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-top:2px;
+  }
+
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:2.4rem;
+    font-size:0.94rem;
+    font-weight:400;
+    color:var(--ink-dim);
+  }
+  .nav-links a{
+    position:relative;
+    padding:0.4rem 0.1rem;
+    transition:color 0.25s var(--ease);
+  }
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-links a.active{ color:var(--ink); }
+  .nav-links a.active::after{
+    content:"";
+    position:absolute;
+    left:50%; bottom:-2px;
+    transform:translateX(-50%);
+    width:4px; height:4px;
+    border-radius:50%;
+    background:var(--green-2);
+  }
+
+  .nav-toggle{
+    display:none;
+    width:38px; height:38px;
+    align-items:center; justify-content:center;
+    background:none; border:1px solid var(--border-strong);
+    border-radius:50%;
+    cursor:pointer;
+    color:var(--ink);
+  }
+
+  .nav-mobile{
+    display:none;
+    flex-direction:column;
+    padding:0 var(--space-3) 1.2rem;
+    gap:1.1rem;
+    font-size:1rem;
+    color:var(--ink-dim);
+  }
+  .nav-mobile a.active{ color:var(--green-2); }
+  .site-nav.open .nav-mobile{ display:flex; }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:0.6rem;
+    padding:0.95rem 2.1rem;
+    border-radius:var(--radius-pill);
+    font-family:var(--font-sans);
+    font-size:0.85rem;
+    font-weight:500;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease), border-color .35s var(--ease);
+    white-space:nowrap;
+  }
+  .btn svg{ width:16px; height:16px; transition:transform 0.35s var(--ease); }
+  .btn:hover svg{ transform:translateX(4px); }
+  .btn:active{ transform:scale(0.97); }
+
+  .btn-primary{
+    background:linear-gradient(180deg, var(--green-2), var(--green));
+    color:#0c0f07;
+    box-shadow:0 8px 30px -12px rgba(132,160,85,0.55);
+  }
+  .btn-primary:hover{
+    box-shadow:0 10px 34px -10px rgba(163,194,108,0.7);
+    transform:translateY(-2px);
+  }
+
+  .btn-outline{
+    background:transparent;
+    color:var(--ink);
+    border-color:var(--border-strong);
+  }
+  .btn-outline:hover{
+    border-color:var(--green-2);
+    color:var(--green-2);
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding:var(--space-5) var(--space-3) var(--space-4);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .mandala-wrap{
+    width:min(640px, 92vw);
+    aspect-ratio:1/1;
+    margin:0 auto var(--space-3);
+    position:relative;
+  }
+  .mandala-wrap svg{
+    width:100%; height:100%;
+    animation:breathe 7s var(--ease) infinite;
+  }
+  @keyframes breathe{
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.025); opacity:0.96; }
+  }
+  .mandala-rings{
+    transform-origin:400px 400px;
+    animation:rotate-slow 240s linear infinite;
+  }
+  @keyframes rotate-slow{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
+
+  .hero .eyebrow{ margin-bottom:1.2rem; }
+
+  .hero-title{
+    font-size:clamp(1.9rem, 4.2vw, 3.3rem);
+    font-weight:500;
+    font-style:italic;
+    line-height:1.32;
+    color:var(--ink);
+    max-width:26ch;
+    margin:0 auto var(--space-3);
+  }
+  .hero-title sup{
+    font-style:normal;
+    font-size:0.4em;
+    margin-left:0.15em;
+  }
+
+  .hero-sub{
+    font-size:1.08rem;
+    font-weight:300;
+    color:var(--ink-dim);
+    max-width:44ch;
+    margin-bottom:var(--space-4);
+    line-height:1.75;
+  }
+
+  .hero-caption{
+    margin-top:1rem;
+    font-size:0.82rem;
+    color:var(--ink-faint);
+    letter-spacing:0.02em;
+  }
+
+  /* ============ PANELS ============ */
+  .panel{
+    background:linear-gradient(180deg, var(--panel), var(--panel-2));
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:var(--space-4);
+  }
+  .panel + .panel{ margin-top:var(--space-3); }
+
+  section.section{
+    padding:var(--space-3) 0;
+  }
+
+  /* founding panel */
+  .founding-panel{ text-align:center; }
+  .panel-desc{
+    color:var(--ink-dim);
+    font-size:1rem;
+    margin-top:0.9rem;
+  }
+
+  .stat-row{
+    display:flex;
+    justify-content:center;
+    margin:var(--space-4) 0 var(--space-3);
+  }
+  .stat{
+    flex:1;
+    max-width:220px;
+    padding:0 var(--space-3);
+    border-left:1px solid var(--border);
+  }
+  .stat:first-child{ border-left:none; }
+  .stat-num{
+    display:block;
+    font-family:var(--font-display);
+    font-size:clamp(2rem, 4vw, 2.9rem);
+    color:var(--green-2);
+    line-height:1;
+  }
+  .stat-label{
+    display:block;
+    margin-top:0.6rem;
+    font-size:0.68rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+
+  .progress{
+    height:6px;
+    width:100%;
+    background:rgba(255,255,255,0.06);
+    border-radius:var(--radius-pill);
+    overflow:hidden;
+    margin-bottom:var(--space-3);
+  }
+  .progress-fill{
+    height:100%;
+    width:70%;
+    border-radius:var(--radius-pill);
+    background:linear-gradient(90deg, var(--green-deep), var(--green-2));
+  }
+
+  .panel-footer{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.55rem;
+    font-size:0.85rem;
+    color:var(--ink-dim);
+  }
+  .panel-footer svg{ width:16px; height:16px; color:var(--green-2); }
+
+  /* cta panel */
+  .cta-panel{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--space-3);
+    flex-wrap:wrap;
+    text-align:left;
+  }
+  .cta-left{
+    display:flex;
+    align-items:flex-start;
+    gap:1.1rem;
+    flex:1;
+    min-width:260px;
+  }
+  .cta-icon{
+    width:46px; height:46px;
+    flex-shrink:0;
+    border-radius:50%;
+    border:1px solid var(--border-strong);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--green-2);
+  }
+  .cta-icon svg{ width:22px; height:22px; }
+  .cta-title{
+    font-family:var(--font-sans);
+    font-weight:500;
+    font-size:1rem;
+    letter-spacing:0.02em;
+    color:var(--ink);
+    margin-bottom:0.35rem;
+  }
+  .cta-desc{
+    font-size:0.92rem;
+    color:var(--ink-dim);
+    max-width:46ch;
+    line-height:1.65;
+  }
+  .cta-right{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.7rem;
+  }
+  .cta-caption{
+    display:flex; align-items:center; gap:0.4rem;
+    font-size:0.76rem;
+    color:var(--ink-faint);
+  }
+  .cta-caption svg{ width:12px; height:12px; }
+
+  /* ============ FEATURES ============ */
+  .feature-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1.1rem;
+  }
+  .feature-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    padding:1.9rem 1.6rem;
+    transition:border-color 0.35s var(--ease), transform 0.35s var(--ease);
+  }
+  .feature-card:hover{
+    border-color:var(--border-strong);
+    transform:translateY(-3px);
+  }
+  .feature-icon{
+    width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--green-2);
+    margin-bottom:1.1rem;
+  }
+  .feature-icon svg{ width:100%; height:100%; }
+  .feature-card h3{
+    font-family:var(--font-sans);
+    font-weight:500;
+    font-size:0.98rem;
+    color:var(--ink);
+    margin-bottom:0.5rem;
+    letter-spacing:0.01em;
+  }
+  .feature-card p{
+    font-size:0.88rem;
+    color:var(--ink-dim);
+    line-height:1.65;
+  }
+
+  /* ============ FOOTER ============ */
+  .site-footer{
+    margin-top:var(--space-6);
+    border-top:1px solid var(--border);
+    padding-top:var(--space-4);
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:var(--space-4);
+    padding-bottom:var(--space-4);
+  }
+  .footer-brand{
+    display:flex;
+    align-items:center;
+    gap:0.85rem;
+  }
+  .footer-brand .brand-mark{ width:36px; height:36px; }
+  .footer-brand .brand-name{ font-size:1.1rem; }
+  .footer-heading{
+    font-size:0.68rem;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--green-2);
+    margin-bottom:1rem;
+  }
+  .footer-col{ min-width:160px; }
+  .social-row{ display:flex; gap:0.7rem; }
+  .social-icon{
+    width:36px; height:36px;
+    border:1px solid var(--border-strong);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink-dim);
+    transition:color .3s var(--ease), border-color .3s var(--ease);
+  }
+  .social-icon:hover{ color:var(--green-2); border-color:var(--green-2); }
+  .social-icon svg{ width:16px; height:16px; }
+  .legal-links{ display:flex; flex-direction:column; gap:0.7rem; font-size:0.88rem; color:var(--ink-dim); }
+  .legal-links a:hover{ color:var(--ink); }
+
+  .footer-copy{
+    text-align:center;
+    font-size:0.78rem;
+    color:var(--ink-faint);
+    padding-bottom:var(--space-4);
+  }
+
+  /* ============================================================
+     PARTICIPANT / SERVICE COUNTER (hero badge)
+     ------------------------------------------------------------
+     To change the number shown here, edit PEOPLE_SERVED_COUNT
+     near the top of the <script> section at the bottom of this
+     file. The label text ("People Served") can be edited
+     directly in the HTML below, in the .counter-label span.
+  ============================================================ */
+  .counter-badge{
+    display:inline-flex;
+    align-items:baseline;
+    gap:0.55rem;
+    padding:0.6rem 1.4rem;
+    margin-bottom:1.6rem;
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius-pill);
+    background:rgba(163,194,108,0.05);
+  }
+  .counter-num{
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    color:var(--green-2);
+    line-height:1;
+  }
+  .counter-label{
+    font-size:0.68rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+  }
+
+  /* ============================================================
+     GET STARTED FLOW — overlay, steps, waiver checkboxes
+     ------------------------------------------------------------
+     All step copy lives directly in the HTML further down
+     (search for "GET STARTED FLOW MODAL"). Each step is a
+     .flow-step block; only one is shown at a time via the
+     .is-active class, toggled by the script at the bottom
+     of the file.
+  ============================================================ */
+  body.flow-open{ overflow:hidden; }
+
+  .flow-overlay{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:var(--space-3);
+    background:rgba(4,5,3,0.78);
+    backdrop-filter:blur(6px);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.35s var(--ease);
+  }
+  .flow-overlay.is-open{
+    opacity:1;
+    visibility:visible;
+  }
+
+  .flow-modal{
+    position:relative;
+    width:100%;
+    max-width:560px;
+    max-height:min(720px, 88vh);
+    display:flex;
+    flex-direction:column;
+    background:linear-gradient(180deg, var(--panel), var(--panel-2));
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius-md);
+    padding:var(--space-4) var(--space-4) var(--space-3);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,0.7);
+    transform:translateY(14px) scale(0.98);
+    opacity:0;
+    transition:transform 0.4s var(--ease), opacity 0.4s var(--ease);
+  }
+  .flow-overlay.is-open .flow-modal{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+
+  .flow-close{
+    position:absolute;
+    top:1.1rem; right:1.1rem;
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    background:none;
+    border:1px solid var(--border-strong);
+    border-radius:50%;
+    color:var(--ink-dim);
+    cursor:pointer;
+    transition:color .25s var(--ease), border-color .25s var(--ease);
+  }
+  .flow-close:hover{ color:var(--ink); border-color:var(--green-2); }
+  .flow-close svg{ width:14px; height:14px; }
+
+  .flow-progress{
+    display:flex;
+    justify-content:center;
+    gap:0.5rem;
+    margin-bottom:1.2rem;
+  }
+  .flow-dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--border-strong);
+    transition:background .3s var(--ease), transform .3s var(--ease);
+  }
+  .flow-dot.is-current{ background:var(--green-2); transform:scale(1.3); }
+  .flow-dot.is-done{ background:var(--green); }
+
+  .flow-step{ display:none; flex-direction:column; min-height:0; }
+  .flow-step.is-active{ display:flex; }
+
+  .flow-title{
+    font-size:1.6rem;
+    text-align:center;
+    margin-bottom:1rem;
+  }
+
+  .flow-scroll{
+    overflow-y:auto;
+    padding-right:0.4rem;
+    margin-bottom:1.2rem;
+  }
+  .flow-scroll::-webkit-scrollbar{ width:6px; }
+  .flow-scroll::-webkit-scrollbar-thumb{ background:var(--border-strong); border-radius:99px; }
+
+  .flow-text{
+    font-size:0.94rem;
+    color:var(--ink-dim);
+    line-height:1.7;
+    margin-bottom:0.9rem;
+  }
+  .flow-text.small{ font-size:0.86rem; }
+
+  .flow-divider{
+    height:1px;
+    background:var(--border);
+    margin:1.2rem 0;
+  }
+
+  .flow-subhead{
+    font-family:var(--font-sans);
+    font-weight:500;
+    font-size:0.92rem;
+    letter-spacing:0.03em;
+    color:var(--ink);
+    margin-bottom:0.6rem;
+  }
+
+  /* waiver checkboxes */
+  .waiver-item{
+    display:flex;
+    align-items:flex-start;
+    gap:0.75rem;
+    padding:0.75rem 0;
+    cursor:pointer;
+    border-top:1px solid var(--border);
+  }
+  .waiver-item:first-of-type{ border-top:none; }
+  .waiver-item input{
+    position:absolute;
+    opacity:0;
+    width:1px; height:1px;
+  }
+  .waiver-box{
+    flex-shrink:0;
+    width:20px; height:20px;
+    margin-top:0.1rem;
+    border:1.5px solid var(--border-strong);
+    border-radius:5px;
+    position:relative;
+    transition:border-color .25s var(--ease), background .25s var(--ease);
+  }
+  .waiver-box::after{
+    content:"";
+    position:absolute;
+    left:5px; top:1px;
+    width:6px; height:11px;
+    border:solid var(--bg);
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg) scale(0);
+    transition:transform .2s var(--ease);
+  }
+  .waiver-item input:checked + .waiver-box{
+    background:var(--green-2);
+    border-color:var(--green-2);
+  }
+  .waiver-item input:checked + .waiver-box::after{ transform:rotate(45deg) scale(1); }
+  .waiver-item input:focus-visible + .waiver-box{ outline:1.5px solid var(--green-2); outline-offset:2px; }
+  .waiver-label{
+    font-size:0.9rem;
+    color:var(--ink-dim);
+    line-height:1.6;
+  }
+
+  .flow-hint{
+    font-size:0.78rem;
+    color:var(--ink-faint);
+    text-align:center;
+    margin-bottom:1rem;
+    min-height:1em;
+  }
+  .flow-hint.is-alert{ color:var(--green-2); }
+
+  .flow-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:0.8rem;
+  }
+  .flow-actions .btn{ flex:1; justify-content:center; }
+
+  .btn[disabled]{
+    opacity:0.4;
+    cursor:not-allowed;
+    box-shadow:none;
+    transform:none !important;
+  }
+
+  /* confirmation list (step 2) */
+  .confirm-list{ margin:0; padding:0; list-style:none; }
+  .confirm-list li{
+    display:flex;
+    align-items:flex-start;
+    gap:0.65rem;
+    padding:0.65rem 0;
+    border-top:1px solid var(--border);
+    font-size:0.9rem;
+    color:var(--ink-dim);
+    line-height:1.6;
+  }
+  .confirm-list li:first-child{ border-top:none; }
+  .confirm-list svg{
+    flex-shrink:0;
+    width:16px; height:16px;
+    margin-top:0.2rem;
+    color:var(--green-2);
+  }
+
+  /* next-step success icon */
+  .flow-check-icon{
+    width:64px; height:64px;
+    margin:0 auto 1.2rem;
+    border-radius:50%;
+    border:1px solid var(--border-strong);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--green-2);
+  }
+  .flow-check-icon svg{ width:28px; height:28px; }
+
+  @media (max-width:560px){
+    .flow-modal{ padding:var(--space-3); }
+    .flow-actions{ flex-direction:column-reverse; }
+    .flow-actions .btn{ width:100%; }
+  }
+
+  /* ============ REVEAL ANIMATION ============ */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px){
+    .feature-grid{ grid-template-columns:repeat(2, 1fr); }
+    .stat-row{ flex-wrap:wrap; row-gap:1.5rem; }
+    .stat{ flex:1 1 40%; border-left:none; }
+  }
+
+  @media (max-width: 720px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:flex; }
+    .cta-panel{ text-align:left; }
+    .cta-right{ align-items:flex-start; width:100%; }
+    .cta-right .btn{ width:100%; justify-content:center; }
+  }
+
+  @media (max-width: 560px){
+    .feature-grid{ grid-template-columns:1fr; }
+    .panel{ padding:var(--space-3); }
+    .brand-tag{ display:none; }
+    .stat{ flex:1 1 100%; padding:0.6rem 0; border-left:none; border-top:1px solid var(--border); }
+    .stat:first-child{ border-top:none; }
+    .footer-inner{ flex-direction:column; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner container">
+    <a class="brand" href="#top">
+      <span class="brand-mark" id="brandMark"></span>
+      <span class="brand-text">
+        <span class="brand-name">MetaBreathWork<sup>™</sup></span>
+        <span class="brand-tag">Breathe. Balance. Become.</span>
+      </span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#top" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#practice">The Practice</a>
+      <a href="#resources">Resources</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" width="18" height="18">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#top" class="active">Home</a>
+    <a href="#about">About</a>
+    <a href="#practice">The Practice</a>
+    <a href="#resources">Resources</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="mandala-wrap">
+      <svg id="mandala" viewBox="0 0 800 800" aria-hidden="true"></svg>
+    </div>
+
+    <p class="eyebrow">Breathe &nbsp;·&nbsp; Balance &nbsp;·&nbsp; Become</p>
+
+    <!-- ============================================================
+         PARTICIPANT / SERVICE COUNTER
+         To change the NUMBER: edit PEOPLE_SERVED_COUNT in the
+         <script> section near the bottom of this file.
+         To change the LABEL text below, edit it directly here.
+    ============================================================ -->
+    <div class="counter-badge reveal is-visible">
+      <span class="counter-num" id="counterNum">0</span>
+      <span class="counter-label">People Served</span>
+    </div>
+
+    <!-- ============================================================
+         MAIN HERO QUOTE
+         To change the quote, edit the text directly below
+         (keep it inside the curly quotes, with the <sup>™</sup>
+         trademark symbol right after the closing quote).
+    ============================================================ -->
+    <h1 class="hero-title">&ldquo;There is no perfect breath, only the best breath for this moment&rdquo; <sup>™</sup></h1>
+    <p class="hero-sub">Placeholder supporting copy will describe the offer in a sentence or two — swap this out once the messaging is locked.</p>
+
+    <!-- "Get Started" launches the onboarding flow (info/consent -> confirmation -> next step). See #btnGetStarted handler in the script at the bottom. -->
+    <button type="button" class="btn btn-primary" id="btnGetStarted">
+      Get Started
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <p class="hero-caption">Placeholder microcopy under the button.</p>
+  </section>
+
+  <!-- ================================================================
+       IMPACT COUNTER — four-part stat section
+       ------------------------------------------------------------
+       To change a LABEL: edit the .stat-label text directly below.
+       To change a NUMBER: edit the IMPACT_STATS values in the
+       <script> section near the bottom of this file (search
+       "IMPACT_STATS") — do not edit the numbers here directly,
+       they're filled in by the count-up animation on load.
+       The 4th stat is a placeholder — swap in the real label
+       and number whenever it's ready.
+  ================================================================ -->
+  <section class="section container">
+    <div class="panel founding-panel reveal">
+      <p class="eyebrow center">Our Impact</p>
+      <p class="panel-desc">Placeholder line introducing this section — replace with real copy whenever ready.</p>
+
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-num" id="statSessions">0</span>
+          <span class="stat-label">Sessions Completed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statOrgs">0</span>
+          <span class="stat-label">Organizations &amp; Communities Reached</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statPetitions">0</span>
+          <span class="stat-label">Petitions Signed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statFour">0</span>
+          <span class="stat-label">Volunteer Hours Contributed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA PANEL ============ -->
+  <section class="section container">
+    <div class="panel cta-panel reveal">
+      <div class="cta-left">
+        <div class="cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 13l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <p class="cta-title">Placeholder prompt heading</p>
+          <p class="cta-desc">Placeholder body copy explaining the next step before the user can proceed.</p>
+        </div>
+      </div>
+      <div class="cta-right">
+        <!-- Also opens the Get Started flow — see #btnReviewAgree handler in the script at the bottom. -->
+        <button type="button" class="btn btn-primary" id="btnReviewAgree">
+          Review &amp; Agree
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <p class="cta-caption">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          Secure &amp; Confidential
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="section container">
+    <div class="feature-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 21c-3-2-5-6-5-10a5 5 0 0 1 10 0c0 4-2 8-5 10Z"/><path d="M15 21c3-2 5-6 5-10a5 5 0 0 0-10 0"/></svg>
+        </div>
+        <h3>Placeholder Title</h3>
+        <p>Placeholder supporting sentence describing this benefit.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg>
+        </div>
+        <h3>Placeholder Title</h3>
+        <p>Placeholder supporting sentence describing this benefit.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+        </div>
+        <h3>Placeholder Title</h3>
+        <p>Placeholder supporting sentence describing this benefit.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2c3 3 5 6.5 5 10a5 5 0 0 1-10 0c0-3.5 2-7 5-10Z"/></svg>
+        </div>
+        <h3>Placeholder Title</h3>
+        <p>Placeholder supporting sentence describing this benefit.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="contact">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark" id="brandMarkFooter"></span>
+      <span class="brand-text">
+        <span class="brand-name">MetaBreathWork<sup>™</sup></span>
+        <span class="brand-tag">Breathe. Balance. Become.</span>
+      </span>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Connect</p>
+      <div class="social-row">
+        <a class="social-icon" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+        <a class="social-icon" href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="4"/><polygon points="10 9 15 12 10 15" fill="currentColor" stroke="none"/></svg></a>
+        <a class="social-icon" href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.5 2.5 2 4 5 4"/></svg></a>
+        <a class="social-icon" href="#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-heading">Legal</p>
+      <div class="legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer-copy">© 2026 MetaBreathWork, LLC. All rights reserved.</p>
+</footer>
+
+<!-- ================================================================
+     GET STARTED FLOW MODAL
+     ------------------------------------------------------------
+     Flow: Home -> "Get Started" -> Information/Consent ->
+           Confirmation -> Next Step.
+
+     THIS IS WHERE ALL THE FLOW TEXT LIVES. Edit paragraphs,
+     headings and button labels directly below — no JavaScript
+     knowledge needed for text changes.
+
+     - Step 0 (data-step="0"): information + required waiver
+       checkboxes. To add/remove a required checkbox, copy or
+       delete one whole ".waiver-item" block.
+     - Step 1 (data-step="1"): confirmation recap. The checklist
+       here is filled in automatically from whichever waiver
+       items the participant checked in Step 0 — you don't need
+       to edit it by hand.
+     - Step 2 (data-step="2"): final "next step" screen shown
+       after everything is confirmed.
+================================================================ -->
+<div class="flow-overlay" id="flowOverlay" aria-hidden="true">
+  <div class="flow-modal" role="dialog" aria-modal="true" aria-labelledby="flowStepTitle">
+
+    <button type="button" class="flow-close" id="flowClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+    </button>
+
+    <div class="flow-progress" aria-hidden="true">
+      <span class="flow-dot" data-dot="0"></span>
+      <span class="flow-dot" data-dot="1"></span>
+      <span class="flow-dot" data-dot="2"></span>
+    </div>
+
+    <!-- ---------- STEP 0 : INFORMATION & CONSENT ---------- -->
+    <div class="flow-step" data-step="0">
+      <p class="eyebrow center">Step 1 of 3</p>
+      <h2 class="flow-title" id="flowStepTitle">Before You Begin</h2>
+
+      <div class="flow-scroll">
+        <!-- EDIT: informational copy shown before the waiver -->
+        <p class="flow-text">Placeholder paragraph introducing the practice and what a participant can expect during a session. Replace with real program information.</p>
+        <p class="flow-text">Placeholder second paragraph — e.g. any preparation notes, contraindications, or general safety guidance.</p>
+
+        <div class="flow-divider"></div>
+
+        <h3 class="flow-subhead">Participant Waiver &amp; Consent</h3>
+        <p class="flow-text small">Placeholder short intro sentence for the waiver section below.</p>
+
+        <!-- EDIT: duplicate a whole "waiver-item" label block to add another required checkbox. Each one must stay checked before the participant can continue. -->
+        <label class="waiver-item">
+          <input type="checkbox" class="waiver-check">
+          <span class="waiver-box"></span>
+          <span class="waiver-label">Placeholder waiver point one — e.g. acknowledgment of health disclosures.</span>
+        </label>
+        <label class="waiver-item">
+          <input type="checkbox" class="waiver-check">
+          <span class="waiver-box"></span>
+          <span class="waiver-label">Placeholder waiver point two — e.g. assumption of risk during breathwork practice.</span>
+        </label>
+        <label class="waiver-item">
+          <input type="checkbox" class="waiver-check">
+          <span class="waiver-box"></span>
+          <span class="waiver-label">Placeholder waiver point three — e.g. release of liability and terms agreement.</span>
+        </label>
+      </div>
+
+      <p class="flow-hint" id="flowHint">Please check all boxes above to continue.</p>
+      <div class="flow-actions">
+        <button type="button" class="btn btn-outline" data-flow-action="close">Cancel</button>
+        <button type="button" class="btn btn-primary" id="flowContinueBtn" data-flow-action="next" disabled>
+          Continue
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ---------- STEP 1 : CONFIRMATION ---------- -->
+    <div class="flow-step" data-step="1">
+      <p class="eyebrow center">Step 2 of 3</p>
+      <h2 class="flow-title">Confirm &amp; Agree</h2>
+
+      <div class="flow-scroll">
+        <!-- EDIT: confirmation intro copy -->
+        <p class="flow-text">Placeholder copy confirming what the participant is about to agree to. The list below fills in automatically from Step 1.</p>
+        <ul class="confirm-list" id="confirmList"><!-- populated by script --></ul>
+      </div>
+
+      <div class="flow-actions">
+        <button type="button" class="btn btn-outline" data-flow-action="back">Back</button>
+        <button type="button" class="btn btn-primary" data-flow-action="next">
+          Confirm &amp; Continue
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ---------- STEP 2 : NEXT STEP ---------- -->
+    <div class="flow-step" data-step="2">
+      <p class="eyebrow center">Step 3 of 3</p>
+      <h2 class="flow-title">You're All Set</h2>
+
+      <div class="flow-scroll" style="text-align:center;">
+        <div class="flow-check-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <!-- EDIT: success / next-step copy -->
+        <p class="flow-text">Placeholder confirmation message letting the participant know their agreement was recorded, plus a short description of what happens next (e.g. scheduling, next session, contact info).</p>
+      </div>
+
+      <div class="flow-actions" style="justify-content:center;">
+        <button type="button" class="btn btn-primary" data-flow-action="finish">
+          Placeholder Next-Step Button Label
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ============ MANDALA GENERATION ============ */
+  (function(){
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.getElementById('mandala');
+    const cx = 400, cy = 400;
+
+    // resolved hex values (kept in sync with the CSS tokens above) —
+    // used directly instead of var() since not all renderers resolve
+    // CSS custom properties inside SVG presentation attributes.
+    const LINE = '#f2efe3';
+    const GREEN2 = '#a3c26c';
+    const BG = '#070706';
+    const INK_FAINT = '#6d6a5e';
+
+    function el(name, attrs){
+      const e = document.createElementNS(svgNS, name);
+      for(const k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+
+    // ---- concentric rings ----
+    const ringGroup = el('g', {class:'mandala-rings'});
+    const rings = [
+      {r:130, dash:null,     op:0.55},
+      {r:185, dash:'1 7',    op:0.45},
+      {r:245, dash:'7 5',    op:0.30},
+      {r:305, dash:null,     op:0.16},
+      {r:365, dash:'1 9',    op:0.30},
+    ];
+    rings.forEach(rg=>{
+      const c = el('circle', {cx, cy, r:rg.r, fill:'none', stroke:LINE, 'stroke-width':1, opacity:rg.op});
+      if(rg.dash) c.setAttribute('stroke-dasharray', rg.dash);
+      ringGroup.appendChild(c);
+    });
+    svg.appendChild(ringGroup);
+
+    // ---- vertical dotted axis ----
+    svg.appendChild(el('line', {x1:cx, y1:35, x2:cx, y2:765, stroke:LINE, 'stroke-width':1.2, 'stroke-dasharray':'1 7', opacity:0.5}));
+
+    // ---- horizontal axis with ECG blip ----
+    const hLeft = 'M40,' + cy + ' L300,' + cy;
+    const ecg = 'M300,' + cy + ' L328,' + cy + ' L338,' + (cy-26) + ' L350,' + (cy+34) + ' L362,' + (cy-14) + ' L372,' + cy + ' L500,' + cy;
+    const hRight = 'M500,' + cy + ' L760,' + cy;
+    [hLeft, ecg, hRight].forEach(d=>{
+      svg.appendChild(el('path', {d, fill:'none', stroke:LINE, 'stroke-width':1.1, opacity:0.55}));
+    });
+    svg.appendChild(el('circle', {cx:40, cy, r:5, fill:BG, stroke:LINE, 'stroke-width':1.2}));
+    svg.appendChild(el('circle', {cx:760, cy, r:5, fill:BG, stroke:LINE, 'stroke-width':1.2}));
+
+    // ---- recursive branch generator (canopy + roots) ----
+    const branchGroup = el('g');
+    function grow(x, y, angle, len, depth, up, w){
+      const rad = angle * Math.PI/180;
+      const dx = len * Math.sin(rad);
+      const dy = (up ? -1 : 1) * len * Math.cos(rad);
+      const x2 = x + dx, y2 = y + dy;
+
+      branchGroup.appendChild(el('line', {
+        x1:x, y1:y, x2:x2, y2:y2,
+        stroke:LINE, 'stroke-width':w, 'stroke-linecap':'round', opacity:0.6
+      }));
+
+      if(depth <= 1){
+        branchGroup.appendChild(el('circle', {
+          cx:x2, cy:y2, r: up ? 3 : 1.6,
+          fill: up ? GREEN2 : LINE,
+          opacity: up ? 0.85 : 0.45
+        }));
+        return;
+      }
+      const spread = 16 + depth*2.4;
+      grow(x2, y2, angle - spread, len*0.72, depth-1, up, w*0.72);
+      grow(x2, y2, angle + spread, len*0.72, depth-1, up, w*0.72);
+    }
+
+    // canopy (lungs / branches reaching up)
+    grow(cx, cy, 0,   96, 5, true, 2.2);
+    grow(cx, cy, -30, 88, 5, true, 2.0);
+    grow(cx, cy, 30,  88, 5, true, 2.0);
+
+    // roots (reaching down)
+    grow(cx, cy, 0,   90, 5, false, 2.0);
+    grow(cx, cy, -30, 82, 5, false, 1.8);
+    grow(cx, cy, 30,  82, 5, false, 1.8);
+
+    svg.appendChild(branchGroup);
+
+    // ---- eye glyph (top) ----
+    const eyeG = el('g', {transform:'translate(' + cx + ',170)'});
+    for(let i=0;i<16;i++){
+      const a = (i/16)*Math.PI*2;
+      const r1=46, r2=56;
+      eyeG.appendChild(el('line', {
+        x1:Math.cos(a)*r1, y1:Math.sin(a)*r1,
+        x2:Math.cos(a)*r2, y2:Math.sin(a)*r2,
+        stroke:LINE, 'stroke-width':1, opacity:0.4
+      }));
+    }
+    eyeG.appendChild(el('ellipse', {cx:0, cy:0, rx:30, ry:14, fill:'none', stroke:LINE, 'stroke-width':1.2, opacity:0.75}));
+    eyeG.appendChild(el('circle', {cx:0, cy:0, r:7, fill:'none', stroke:GREEN2, 'stroke-width':1.2, opacity:0.9}));
+    eyeG.appendChild(el('circle', {cx:0, cy:0, r:2.4, fill:GREEN2}));
+    svg.appendChild(eyeG);
+
+    // ---- compass rose (bottom) ----
+    const compG = el('g', {transform:'translate(' + cx + ',640)'});
+    compG.appendChild(el('circle', {cx:0, cy:0, r:34, fill:'none', stroke:LINE, 'stroke-width':1, opacity:0.5}));
+    [0,90,180,270].forEach(a=>{
+      const rad=a*Math.PI/180;
+      compG.appendChild(el('line', {
+        x1:Math.cos(rad)*28, y1:Math.sin(rad)*28,
+        x2:Math.cos(rad)*40, y2:Math.sin(rad)*40,
+        stroke:LINE, 'stroke-width':1, opacity:0.5
+      }));
+    });
+    compG.appendChild(el('polygon', {points:'0,-22 6,0 0,22 -6,0', fill:'none', stroke:GREEN2, 'stroke-width':1.2, opacity:0.85}));
+    compG.appendChild(el('text', {x:0, y:-46, 'text-anchor':'middle', fill:INK_FAINT, 'font-size':9, 'font-family':'Jost, sans-serif', 'letter-spacing':'2'}));
+    compG.querySelector('text').textContent = 'N';
+    svg.appendChild(compG);
+
+  })();
+
+  /* ============ TINY BRAND MARK (compass/target) ============ */
+  (function(){
+    const svgNS = "http://www.w3.org/2000/svg";
+    function markSVG(){
+      const s = document.createElementNS(svgNS,'svg');
+      s.setAttribute('viewBox','0 0 40 40');
+      const mk = (name, attrs)=>{ const e=document.createElementNS(svgNS,name); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; };
+      s.appendChild(mk('circle',{cx:20,cy:20,r:17,fill:'none',stroke:'#f2efe3','stroke-width':0.8,opacity:0.6}));
+      s.appendChild(mk('circle',{cx:20,cy:20,r:10,fill:'none',stroke:'#f2efe3','stroke-width':0.8,opacity:0.5}));
+      s.appendChild(mk('circle',{cx:20,cy:20,r:2,fill:'#a3c26c'}));
+      [0,90,180,270].forEach(a=>{
+        const rad=a*Math.PI/180;
+        s.appendChild(mk('line',{x1:20+Math.cos(rad)*17,y1:20+Math.sin(rad)*17,x2:20+Math.cos(rad)*21,y2:20+Math.sin(rad)*21,stroke:'#f2efe3','stroke-width':0.8,opacity:0.6}));
+      });
+      return s;
+    }
+    document.getElementById('brandMark').appendChild(markSVG());
+    document.getElementById('brandMarkFooter').appendChild(markSVG());
+  })();
+
+  /* ============ MOBILE NAV ============ */
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('siteNav');
+  navToggle.addEventListener('click', ()=>{
+    const open = siteNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+
+  /* ============ SCROLL REVEAL ============ */
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15});
+    revealEls.forEach(elm=>io.observe(elm));
+  } else {
+    revealEls.forEach(elm=>elm.classList.add('is-visible'));
+  }
+
+  /* ================================================================
+     SITE CONTENT CONFIG — EDIT NUMBERS HERE
+     ------------------------------------------------------------
+     This is the ONE place to update every counted number on the
+     site. Change any value below and reload the page — labels
+     are edited separately, directly in the HTML next to each
+     stat (search "stat-label" or "counter-label").
+  ================================================================ */
+  const PEOPLE_SERVED_COUNT = 1248;   // <-- hero "People Served" badge
+
+  const IMPACT_STATS = {               // <-- the 4-part "Our Impact" section
+    sessionsCompleted:     3200,       // Sessions Completed
+    organizationsReached:  48,         // Organizations & Communities Reached
+    petitionsSigned:       5400,       // Petitions Signed
+    statFour:              12400       // Volunteer Hours Contributed — placeholder value, swap for the real figure whenever you have it
+  };
+
+  /* ============================================================
+     REUSABLE COUNT-UP ANIMATION
+     Animates a number from 0 up to a target value as soon as the
+     page loads (does not wait for scroll — this keeps every
+     counter reliably visible, including ones lower on the page).
+     Used for the hero badge and all four "Our Impact" stats.
+  ============================================================ */
+  function animateNumberElement(elId, target){
+    const numEl = document.getElementById(elId);
+    if(!numEl) return;
+    const duration = 1400; // ms
+    const startTime = performance.now();
+    function tick(now){
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      numEl.textContent = Math.round(target * eased).toLocaleString();
+      if(progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* ============ COUNTER: hero "People Served" badge ============ */
+  animateNumberElement('counterNum', PEOPLE_SERVED_COUNT);
+
+  /* ============ COUNTER: "Our Impact" four-part stats ============ */
+  animateNumberElement('statSessions',  IMPACT_STATS.sessionsCompleted);
+  animateNumberElement('statOrgs',      IMPACT_STATS.organizationsReached);
+  animateNumberElement('statPetitions', IMPACT_STATS.petitionsSigned);
+  animateNumberElement('statFour',      IMPACT_STATS.statFour);
+
+  /* ================================================================
+     GET STARTED FLOW
+     ------------------------------------------------------------
+     Controls the modal opened by "Get Started" / "Review & Agree".
+     Step order: 0 = Information & Consent, 1 = Confirmation,
+     2 = Next Step. Step text/checkboxes live in the HTML above
+     (search "GET STARTED FLOW MODAL") — this script only handles
+     showing/hiding steps, validating the required checkboxes,
+     and building the confirmation recap list.
+  ================================================================ */
+  (function(){
+    const overlay = document.getElementById('flowOverlay');
+    const modal = overlay ? overlay.querySelector('.flow-modal') : null;
+    const steps = Array.prototype.slice.call(document.querySelectorAll('.flow-step'));
+    const dots = Array.prototype.slice.call(document.querySelectorAll('.flow-dot'));
+    const openTriggers = [document.getElementById('btnGetStarted'), document.getElementById('btnReviewAgree')].filter(Boolean);
+    const closeBtn = document.getElementById('flowClose');
+    const continueBtn = document.getElementById('flowContinueBtn');
+    const hint = document.getElementById('flowHint');
+    const confirmList = document.getElementById('confirmList');
+    const waiverChecks = Array.prototype.slice.call(document.querySelectorAll('.waiver-check'));
+
+    if(!overlay || steps.length === 0) return;
+
+    let currentStep = 0;
+    let lastFocusedEl = null;
+
+    function showStep(index){
+      currentStep = index;
+      steps.forEach(function(stepEl){
+        const isActive = Number(stepEl.getAttribute('data-step')) === index;
+        stepEl.classList.toggle('is-active', isActive);
+      });
+      dots.forEach(function(dot){
+        const dotIndex = Number(dot.getAttribute('data-dot'));
+        dot.classList.toggle('is-current', dotIndex === index);
+        dot.classList.toggle('is-done', dotIndex < index);
+      });
+      if(index === 1) buildConfirmList();
+      // move focus to the step heading for accessibility
+      const activeStep = steps[index];
+      const heading = activeStep && activeStep.querySelector('.flow-title');
+      if(heading){ heading.setAttribute('tabindex','-1'); heading.focus(); }
+    }
+
+    function buildConfirmList(){
+      if(!confirmList) return;
+      confirmList.innerHTML = '';
+      waiverChecks.forEach(function(chk){
+        if(!chk.checked) return;
+        const labelEl = chk.closest('.waiver-item').querySelector('.waiver-label');
+        const li = document.createElement('li');
+        li.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span></span>';
+        li.querySelector('span').textContent = labelEl ? labelEl.textContent : '';
+        confirmList.appendChild(li);
+      });
+    }
+
+    function checkWaiverCompletion(){
+      const allChecked = waiverChecks.length > 0 && waiverChecks.every(function(c){ return c.checked; });
+      if(continueBtn) continueBtn.disabled = !allChecked;
+      if(hint){
+        hint.textContent = allChecked
+          ? "All set — you're ready to continue."
+          : 'Please check all boxes above to continue.';
+        hint.classList.toggle('is-alert', allChecked);
+      }
+      return allChecked;
+    }
+
+    function openFlow(){
+      lastFocusedEl = document.activeElement;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('flow-open');
+      // reset to a clean first step each time the flow is opened
+      waiverChecks.forEach(function(c){ c.checked = false; });
+      checkWaiverCompletion();
+      showStep(0);
+    }
+
+    function closeFlow(){
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('flow-open');
+      if(lastFocusedEl && typeof lastFocusedEl.focus === 'function'){
+        lastFocusedEl.focus();
+      }
+    }
+
+    openTriggers.forEach(function(btn){
+      btn.addEventListener('click', openFlow);
+    });
+    if(closeBtn) closeBtn.addEventListener('click', closeFlow);
+
+    // backdrop click closes the flow
+    overlay.addEventListener('click', function(e){
+      if(e.target === overlay) closeFlow();
+    });
+
+    // Escape closes the flow
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && overlay.classList.contains('is-open')) closeFlow();
+    });
+
+    // simple focus trap while open
+    overlay.addEventListener('keydown', function(e){
+      if(e.key !== 'Tab' || !modal) return;
+      const focusable = modal.querySelectorAll('button, input, [href], [tabindex]:not([tabindex="-1"])');
+      if(focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault(); last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault(); first.focus();
+      }
+    });
+
+    waiverChecks.forEach(function(chk){
+      chk.addEventListener('change', checkWaiverCompletion);
+    });
+
+    // step action buttons (Continue / Back / Confirm & Continue / Cancel / Finish)
+    document.querySelectorAll('[data-flow-action]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const action = btn.getAttribute('data-flow-action');
+        if(action === 'close'){
+          closeFlow();
+        } else if(action === 'next'){
+          if(currentStep === 0 && !checkWaiverCompletion()) return;
+          showStep(Math.min(currentStep + 1, steps.length - 1));
+        } else if(action === 'back'){
+          showStep(Math.max(currentStep - 1, 0));
+        } else if(action === 'finish'){
+          // Flow complete — closes the modal and returns to the homepage.
+          // Replace this with a redirect (e.g. window.location.href = "...")
+          // if "next step" should send participants somewhere else.
+          closeFlow();
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
