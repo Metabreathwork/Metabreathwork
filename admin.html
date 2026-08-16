@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>MetaBreathWork — Admin Records</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     This page is intentionally NOT linked from the public site's
+     navigation anywhere, and is not part of the public design
+     system requirement — it's an internal tool. It loosely reuses
+     the brand's colors/fonts for a cohesive, professional feel,
+     but is otherwise a plain utilitarian admin screen.
+  ============================================================ */
+  :root{
+    --bg:#070706;
+    --panel:#0d0f0c;
+    --panel-2:#101208;
+    --border:rgba(198,214,160,0.16);
+    --border-strong:rgba(198,214,160,0.34);
+    --green:#84a055;
+    --green-2:#a3c26c;
+    --ink:#f2efe3;
+    --ink-dim:#aeaa9c;
+    --ink-faint:#6d6a5e;
+    --font-display:'Cormorant Garamond', serif;
+    --font-sans:'Jost', sans-serif;
+    --error:#e3a396;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-sans);
+    font-weight:300;
+    line-height:1.6;
+  }
+  h1,h2,h3{ font-family:var(--font-display); font-weight:500; margin:0; color:var(--ink); }
+  a{ color:var(--green-2); }
+  .container{ max-width:960px; margin:0 auto; padding:0 1.5rem; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.2rem 1.5rem;
+    border-bottom:1px solid var(--border);
+  }
+  .brand{ font-family:var(--font-display); font-size:1.3rem; }
+  .brand small{ display:block; font-family:var(--font-sans); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-faint); margin-top:2px; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    padding:0.65rem 1.3rem;
+    border-radius:999px;
+    font-size:0.82rem; font-weight:500; letter-spacing:0.06em;
+    text-transform:uppercase;
+    cursor:pointer; border:1px solid var(--border-strong);
+    background:transparent; color:var(--ink);
+    font-family:var(--font-sans);
+    transition:border-color .2s, color .2s, background .2s;
+  }
+  .btn:hover{ border-color:var(--green-2); color:var(--green-2); }
+  .btn-primary{ background:linear-gradient(180deg, var(--green-2), var(--green)); color:#0c0f07; border-color:transparent; }
+  .btn-primary:hover{ color:#0c0f07; opacity:0.92; }
+  .btn[disabled]{ opacity:0.5; cursor:not-allowed; }
+
+  /* ---------- login ---------- */
+  #loginView{
+    max-width:380px; margin:5rem auto; padding:2.2rem;
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+  }
+  #loginView h1{ font-size:1.6rem; text-align:center; margin-bottom:0.4rem; }
+  #loginView p.sub{ text-align:center; color:var(--ink-dim); font-size:0.88rem; margin-bottom:1.6rem; }
+  .field{ margin-bottom:1rem; }
+  .field label{ display:block; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:0.4rem; }
+  .field input{
+    width:100%; padding:0.75rem 0.9rem;
+    background:rgba(255,255,255,0.03); border:1px solid var(--border-strong); border-radius:8px;
+    color:var(--ink); font-family:var(--font-sans); font-size:0.94rem;
+  }
+  .field input:focus-visible{ outline:none; border-color:var(--green-2); }
+  .form-error{
+    margin-top:0.9rem; padding:0.7rem 0.9rem; border-radius:8px;
+    background:rgba(201,123,107,0.08); border:1px solid rgba(201,123,107,0.4);
+    color:var(--error); font-size:0.84rem; line-height:1.6;
+  }
+  .form-note{ margin-top:1.2rem; font-size:0.78rem; color:var(--ink-faint); text-align:center; line-height:1.6; }
+
+  /* ---------- dashboard ---------- */
+  #dashboardView{ display:none; padding:2rem 0 4rem; }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:0.8rem; align-items:center; justify-content:space-between; margin-bottom:1.4rem; }
+  .filters{ display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .filter-btn{
+    padding:0.5rem 1rem; border-radius:999px; border:1px solid var(--border-strong);
+    background:transparent; color:var(--ink-dim); font-family:var(--font-sans); font-size:0.8rem;
+    cursor:pointer; letter-spacing:0.04em;
+  }
+  .filter-btn.is-active{ background:var(--green-2); color:#0c0f07; border-color:transparent; }
+  .search-input{
+    padding:0.55rem 0.9rem; border-radius:8px; border:1px solid var(--border-strong);
+    background:rgba(255,255,255,0.03); color:var(--ink); font-family:var(--font-sans); font-size:0.86rem;
+    min-width:220px;
+  }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.88rem; }
+  thead th{
+    text-align:left; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-faint); padding:0.6rem 0.8rem; border-bottom:1px solid var(--border-strong);
+  }
+  tbody td{ padding:0.75rem 0.8rem; border-bottom:1px solid var(--border); color:var(--ink-dim); }
+  tbody tr:hover{ background:rgba(163,194,108,0.04); cursor:pointer; }
+  .type-badge{
+    display:inline-block; padding:0.2rem 0.6rem; border-radius:999px; font-size:0.68rem;
+    letter-spacing:0.06em; text-transform:uppercase; border:1px solid var(--border-strong); color:var(--ink-dim);
+  }
+  .type-badge.individual{ color:#a3c26c; border-color:rgba(163,194,108,0.4); }
+  .type-badge.organization{ color:#8fb4d9; border-color:rgba(143,180,217,0.4); }
+  .type-badge.petition{ color:#d9b26f; border-color:rgba(217,178,111,0.4); }
+
+  .state-msg{ text-align:center; padding:3rem 1rem; color:var(--ink-faint); font-size:0.92rem; }
+  .state-msg.error{ color:var(--error); white-space:pre-wrap; text-align:left; background:rgba(201,123,107,0.06); border:1px solid rgba(201,123,107,0.3); border-radius:8px; padding:1rem 1.2rem; }
+
+  /* ---------- record / print view ---------- */
+  #recordView{ display:none; padding:2rem 0 4rem; }
+  .record-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1.6rem; }
+  .record-sheet{
+    background:#ffffff; color:#111111;
+    border-radius:4px; padding:3rem 3.2rem;
+    font-family:'Jost', Arial, sans-serif;
+  }
+  .record-sheet h1, .record-sheet h2, .record-sheet h3{ font-family:'Cormorant Garamond', Georgia, serif; color:#111; }
+  .record-header{ display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #111; padding-bottom:1rem; margin-bottom:1.6rem; }
+  .record-header h1{ font-size:1.6rem; }
+  .record-header .rec-meta{ text-align:right; font-size:0.78rem; color:#444; line-height:1.7; }
+  .record-type-tag{ display:inline-block; margin-top:0.3rem; padding:0.15rem 0.6rem; border:1px solid #111; border-radius:999px; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; }
+
+  .record-section{ margin-bottom:1.6rem; }
+  /* Only short sections stay together on one page — the document
+     text section is expected to span multiple pages when the
+     source waiver/agreement is long, so it's deliberately excluded. */
+  .record-section-keep-together{ page-break-inside:avoid; }
+  .record-section h2{ font-size:1.05rem; border-bottom:1px solid #ccc; padding-bottom:0.3rem; margin-bottom:0.7rem; }
+  .kv-grid{ display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 1.5rem; font-size:0.88rem; }
+  .kv-grid .kv-label{ color:#555; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; }
+  .kv-grid .kv-value{ margin-bottom:0.6rem; }
+
+  .doc-title{ font-size:1.15rem; margin-bottom:0.2rem; }
+  .doc-version{ font-size:0.78rem; color:#555; margin-bottom:1rem; }
+  .doc-section-heading{ font-family:'Cormorant Garamond', Georgia, serif; font-size:1.02rem; margin:1rem 0 0.4rem; break-after:avoid; page-break-after:avoid; }
+  .doc-section-paragraph{ font-size:0.92rem; line-height:1.7; margin-bottom:0.6rem; }
+  .agreements-list{ margin:0.5rem 0 0; padding-left:1.2rem; font-size:0.9rem; line-height:1.7; }
+  .agreements-list li{ margin-bottom:0.4rem; }
+
+  .signature-block{ border-top:1px solid #ccc; margin-top:1.2rem; padding-top:1rem; page-break-inside:avoid; }
+  .signature-line{ font-family:'Cormorant Garamond', Georgia, serif; font-style:italic; font-size:1.3rem; border-bottom:1px solid #111; display:inline-block; padding:0 0.4rem 0.2rem; min-width:260px; }
+  .signature-meta{ font-size:0.78rem; color:#555; margin-top:0.4rem; }
+
+  .record-footnote{ margin-top:2rem; padding-top:1rem; border-top:1px solid #ccc; font-size:0.72rem; color:#666; line-height:1.6; }
+  .record-id-footer{ margin-top:0.6rem; font-size:0.68rem; color:#888; }
+
+  @media print{
+    .topbar, .toolbar, .record-toolbar, #loginView{ display:none !important; }
+    body{ background:#fff; }
+    .record-sheet{ padding:0; }
+    .container{ max-width:none; padding:0; }
+  }
+
+  @media (max-width:640px){
+    .kv-grid{ grid-template-columns:1fr; }
+    .record-sheet{ padding:1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">MetaBreathWork<small>Admin Records — Internal Use Only</small></div>
+  <button class="btn" id="btnSignOut" style="display:none;">Sign Out</button>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginView" class="container">
+  <h1>Admin Sign In</h1>
+  <p class="sub">Authorized administrators only.</p>
+  <form id="loginForm">
+    <div class="field">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" autocomplete="username" required>
+    </div>
+    <div class="field">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" autocomplete="current-password" required>
+    </div>
+    <button type="submit" class="btn btn-primary" id="btnSignIn" style="width:100%; justify-content:center;">Sign In</button>
+    <p class="form-error" id="loginError" hidden></p>
+  </form>
+  <p class="form-note">This page is not linked from the public website and is not indexed. Access is controlled by Supabase Auth + a server-side admin allowlist — see ADMIN_SETUP.md.</p>
+</div>
+
+<!-- ============ DASHBOARD (submission list) ============ -->
+<div id="dashboardView" class="container">
+  <div class="toolbar">
+    <div class="filters">
+      <button class="filter-btn is-active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="individual">Individual</button>
+      <button class="filter-btn" data-filter="organization">Organization</button>
+      <button class="filter-btn" data-filter="petition">Petition</button>
+    </div>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search name or email…">
+  </div>
+
+  <div id="listState"></div>
+
+  <table id="recordsTable" style="display:none;">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Submission ID</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="recordsBody"></tbody>
+  </table>
+</div>
+
+<!-- ============ RECORD DETAIL / PRINT VIEW ============ -->
+<div id="recordView" class="container">
+  <div class="record-toolbar">
+    <button class="btn" id="btnBackToList">&larr; Back to list</button>
+    <button class="btn btn-primary" id="btnPrint">Print / Save as PDF</button>
+  </div>
+  <div class="record-sheet" id="recordSheet"><!-- populated by script --></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  /* ================================================================
+     BACKEND CONFIG — must match the SUPABASE_URL / SUPABASE_ANON_KEY
+     used in index.html. This is the same public/publishable key —
+     it is safe here for the same reason it's safe on the public
+     site: it grants nothing by itself. Admin access is enforced
+     entirely server-side by the is_admin() check in admin_setup.sql,
+     not by anything in this file. Never put a "secret"/service_role
+     key here or anywhere client-side.
+  ================================================================ */
+  const SUPABASE_URL = 'https://winowcxutnfunxmaqhwz.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_NgakHvjIjt3r_lKBoi5GVw_ch19JMMM';
+
+  function describeSupabaseError(err){
+    if(!err) return 'Unknown error (no error object was thrown).';
+    if(typeof err === 'string') return err;
+    const parts = [];
+    if(err.message) parts.push('message: ' + err.message);
+    if(err.details) parts.push('details: ' + err.details);
+    if(err.hint) parts.push('hint: ' + err.hint);
+    if(err.code) parts.push('code: ' + err.code);
+    if(parts.length === 0){
+      try{ parts.push(JSON.stringify(err)); }catch(e){ parts.push(String(err)); }
+    }
+    return parts.join(' | ');
+  }
+
+  let supabaseClient = null;
+  try{
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+    });
+  }catch(err){
+    console.error('MetaBreathWork Admin: failed to create Supabase client — ' + describeSupabaseError(err));
+  }
+
+  const loginView = document.getElementById('loginView');
+  const dashboardView = document.getElementById('dashboardView');
+  const recordView = document.getElementById('recordView');
+  const btnSignOut = document.getElementById('btnSignOut');
+
+  function showView(name){
+    loginView.style.display = name === 'login' ? 'block' : 'none';
+    dashboardView.style.display = name === 'dashboard' ? 'block' : 'none';
+    recordView.style.display = name === 'record' ? 'block' : 'none';
+    btnSignOut.style.display = name === 'login' ? 'none' : 'inline-flex';
+  }
+
+  /* ============ AUTH ============ */
+  const loginForm = document.getElementById('loginForm');
+  const loginError = document.getElementById('loginError');
+  const btnSignIn = document.getElementById('btnSignIn');
+
+  loginForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    loginError.hidden = true;
+    if(!supabaseClient){
+      loginError.textContent = 'Supabase client failed to initialize. Check the browser console.';
+      loginError.hidden = false;
+      return;
+    }
+    btnSignIn.disabled = true;
+    btnSignIn.textContent = 'Signing in…';
+    try{
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if(error) throw error;
+      await loadSubmissions();
+      showView('dashboard');
+    }catch(err){
+      loginError.textContent = 'Sign-in failed — ' + describeSupabaseError(err);
+      loginError.hidden = false;
+    }finally{
+      btnSignIn.disabled = false;
+      btnSignIn.textContent = 'Sign In';
+    }
+  });
+
+  btnSignOut.addEventListener('click', async function(){
+    if(supabaseClient) await supabaseClient.auth.signOut();
+    allRecords = [];
+    showView('login');
+  });
+
+  async function restoreSession(){
+    if(!supabaseClient) { showView('login'); return; }
+    try{
+      const { data } = await supabaseClient.auth.getSession();
+      if(data && data.session){
+        await loadSubmissions();
+        showView('dashboard');
+        return;
+      }
+    }catch(err){
+      console.warn('MetaBreathWork Admin: could not restore session — ' + describeSupabaseError(err));
+    }
+    showView('login');
+  }
+  restoreSession();
+
+  /* ============ DASHBOARD: load + list + filter + search ============ */
+  let allRecords = [];
+  let activeFilter = 'all';
+  let searchTerm = '';
+
+  const listState = document.getElementById('listState');
+  const recordsTable = document.getElementById('recordsTable');
+  const recordsBody = document.getElementById('recordsBody');
+
+  async function loadSubmissions(){
+    listState.innerHTML = '<p class="state-msg">Loading records…</p>';
+    recordsTable.style.display = 'none';
+    try{
+      const { data, error } = await supabaseClient
+        .from('submissions')
+        .select('id,type,payload,research_consent,created_at')
+        .order('created_at', { ascending: false });
+      if(error) throw error;
+      allRecords = data || [];
+      renderList();
+    }catch(err){
+      const msg = describeSupabaseError(err);
+      listState.innerHTML = '<div class="state-msg error">Could not load submissions — ' + msg +
+        '\n\nIf this says permission denied / no rows: your login is not in the admins table yet. See ADMIN_SETUP.md.</div>';
+    }
+  }
+
+  function recordDisplayName(row){
+    const p = row.payload || {};
+    return p.name || p.contact_name || p.organization_name || '(no name on record)';
+  }
+  function recordDisplayContact(row){
+    const p = row.payload || {};
+    return p.email || p.contact_email || '';
+  }
+
+  function renderList(){
+    const filtered = allRecords.filter(function(row){
+      if(activeFilter !== 'all' && row.type !== activeFilter) return false;
+      if(searchTerm){
+        const hay = (recordDisplayName(row) + ' ' + recordDisplayContact(row)).toLowerCase();
+        if(hay.indexOf(searchTerm.toLowerCase()) === -1) return false;
+      }
+      return true;
+    });
+
+    if(filtered.length === 0){
+      listState.innerHTML = '<p class="state-msg">No records match.</p>';
+      recordsTable.style.display = 'none';
+      return;
+    }
+
+    listState.innerHTML = '';
+    recordsTable.style.display = 'table';
+    recordsBody.innerHTML = '';
+    filtered.forEach(function(row){
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><span class="type-badge ' + row.type + '">' + row.type + '</span></td>' +
+        '<td>' + escapeHtml(recordDisplayName(row)) + '</td>' +
+        '<td>' + new Date(row.created_at).toLocaleString() + '</td>' +
+        '<td style="font-family:monospace; font-size:0.78rem;">' + row.id.slice(0, 8) + '&hellip;</td>' +
+        '<td><a href="#">View &amp; Print</a></td>';
+      tr.addEventListener('click', function(){ openRecord(row); });
+      recordsBody.appendChild(tr);
+    });
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      activeFilter = btn.getAttribute('data-filter');
+      renderList();
+    });
+  });
+  document.getElementById('searchInput').addEventListener('input', function(e){
+    searchTerm = e.target.value;
+    renderList();
+  });
+
+  /* ============ RECORD DETAIL / PRINT ============ */
+  const recordSheet = document.getElementById('recordSheet');
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  const TYPE_LABELS = { individual: 'Individual Participation', organization: 'Organization Agreement', petition: 'Petition Signature' };
+
+  function openRecord(row){
+    const p = row.payload || {};
+    const doc = p.document || { title: '', version: '', sections: [], agreements: [] };
+    const sig = p.signature || {};
+
+    let infoRows = '';
+    function addRow(label, value){
+      if(!value) return;
+      infoRows += '<div class="kv-label">' + escapeHtml(label) + '</div><div class="kv-value">' + escapeHtml(value) + '</div>';
+    }
+    addRow('Full Name', p.name);
+    addRow('Email', p.email);
+    addRow('Organization Name', p.organization_name);
+    addRow('Authorized Representative', p.contact_name);
+    addRow('Contact Email', p.contact_email);
+    addRow('City / Residence', p.city);
+
+    let sectionsHtml = '';
+    (doc.sections || []).forEach(function(s){
+      if(s.type === 'heading'){
+        sectionsHtml += '<div class="doc-section-heading">' + escapeHtml(s.text) + '</div>';
+      } else {
+        sectionsHtml += '<p class="doc-section-paragraph">' + escapeHtml(s.text) + '</p>';
+      }
+    });
+
+    let agreementsHtml = '';
+    (doc.agreements || []).forEach(function(a){
+      agreementsHtml += '<li>' + escapeHtml(a) + '</li>';
+    });
+
+    // Research participation is Individual-only, optional, and entirely
+    // separate from the required program agreement above. Only rendered
+    // for individual submissions; never shown for organization/petition.
+    let researchHtml = '';
+    if(row.type === 'individual'){
+      const research = p.research || null;
+      const consentStatus = (typeof row.research_consent === 'boolean')
+        ? row.research_consent
+        : (research ? research.opted_in : null);
+
+      let statusLabel = 'Not offered / not recorded';
+      if(consentStatus === true) statusLabel = 'Accepted';
+      else if(consentStatus === false) statusLabel = 'Declined';
+
+      let researchDetail = '';
+      if(consentStatus === true && research){
+        const rDoc = research.document || {};
+        const rSig = research.signature || {};
+        let rSections = '';
+        (rDoc.sections || []).forEach(function(s){
+          rSections += s.type === 'heading'
+            ? '<div class="doc-section-heading">' + escapeHtml(s.text) + '</div>'
+            : '<p class="doc-section-paragraph">' + escapeHtml(s.text) + '</p>';
+        });
+        researchDetail =
+          '<div class="doc-title" style="margin-top:0.8rem;">' + escapeHtml(rDoc.title || 'Research Participation Consent') + '</div>' +
+          '<div class="doc-version">Version ' + escapeHtml(rDoc.version || 'n/a') + '</div>' +
+          rSections +
+          (rSig.typed_name ? '<div class="signature-meta" style="margin-top:0.5rem;">Signed: <em>' + escapeHtml(rSig.typed_name) + '</em>' +
+            (rSig.signed_at ? (' &middot; ' + new Date(rSig.signed_at).toLocaleString()) : '') + '</div>' : '');
+      }
+
+      researchHtml =
+        '<div class="record-section record-section-keep-together">' +
+          '<h2>Research Participation (Optional)</h2>' +
+          '<div class="kv-grid"><div class="kv-label">Status</div><div class="kv-value">' + escapeHtml(statusLabel) + '</div></div>' +
+          researchDetail +
+        '</div>';
+    }
+
+    const footnote = row.type === 'petition'
+      ? '<div class="record-footnote">This record documents electronic community support collected through MetaBreathWork\u2019s website. It is an internal auditable record and is not represented as satisfying any statutory, government, or ballot-petition certification requirement.</div>'
+      : '';
+
+    recordSheet.innerHTML =
+      '<div class="record-header">' +
+        '<div>' +
+          '<h1>MetaBreathWork<span style="font-size:0.6em;">&trade;</span></h1>' +
+          '<span class="record-type-tag">' + escapeHtml(TYPE_LABELS[row.type] || row.type) + '</span>' +
+        '</div>' +
+        '<div class="rec-meta">' +
+          'Submission ID<br><strong style="font-family:monospace;">' + escapeHtml(row.id) + '</strong><br><br>' +
+          'Submitted<br><strong>' + new Date(row.created_at).toLocaleString() + '</strong>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="record-section record-section-keep-together">' +
+        '<h2>Participant Information</h2>' +
+        '<div class="kv-grid">' + infoRows + '</div>' +
+      '</div>' +
+
+      '<div class="record-section">' +
+        '<h2>Document Presented at Time of Submission</h2>' +
+        '<div class="doc-title">' + escapeHtml(doc.title) + '</div>' +
+        '<div class="doc-version">Version ' + escapeHtml(doc.version || 'n/a') + '</div>' +
+        sectionsHtml +
+      '</div>' +
+
+      '<div class="record-section record-section-keep-together">' +
+        '<h2>Acknowledgment / Agreement</h2>' +
+        '<ul class="agreements-list">' + (agreementsHtml || '<li>(none recorded)</li>') + '</ul>' +
+      '</div>' +
+
+      researchHtml +
+
+      '<div class="signature-block">' +
+        '<div class="kv-label" style="margin-bottom:0.5rem;">Electronic Signature</div>' +
+        '<div class="signature-line">' + escapeHtml(sig.typed_name || p.name || p.contact_name || '') + '</div>' +
+        '<div class="signature-meta">' +
+          'Signed electronically via typed name + explicit checkbox agreement' +
+          (sig.signed_at ? (' &middot; ' + new Date(sig.signed_at).toLocaleString()) : '') +
+        '</div>' +
+      '</div>' +
+
+      footnote +
+      '<div class="record-id-footer">MetaBreathWork Admin Records &middot; Submission ' + escapeHtml(row.id) + ' &middot; Printed ' + new Date().toLocaleString() + '</div>';
+
+    showView('record');
+  }
+
+  document.getElementById('btnBackToList').addEventListener('click', function(){ showView('dashboard'); });
+  document.getElementById('btnPrint').addEventListener('click', function(){ window.print(); });
+</script>
+</body>
+</html>
